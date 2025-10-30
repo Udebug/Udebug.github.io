@@ -3,454 +3,390 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Udebug | Full-Stack Developer</title>
-  <meta name="description" content="Udebug 的个人主页，展示项目、技能与技术博客。">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👨‍💻</text></svg>">
+  <title>Udebug | 开发者主页</title>
+  <meta name="description" content="Udebug 的个人主页，分享项目、技能与成长经历。">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>U</text></svg>">
   
-  <!-- Three.js -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/examples/js/controls/OrbitControls.js"></script>
-
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
   <style>
     :root {
-      --bg: #f0f2f5;
+      --bg: #ffffff;
       --text: #1a1a1a;
-      --card: #ffffff;
       --accent: #0066ff;
-      --accent-light: #e6f0ff;
+      --card: #f8f9fa;
       --border: #e1e4e8;
-      --shadow: rgba(0,0,0,0.1);
     }
     [data-theme="dark"] {
       --bg: #0d1117;
       --text: #f0f6fc;
-      --card: #161b22;
       --accent: #58a6ff;
-      --accent-light: rgba(88, 166, 255, 0.1);
+      --card: #161b22;
       --border: #30363d;
-      --shadow: rgba(0,0,0,0.3);
     }
     * { margin:0; padding:0; box-sizing:border-box; }
-    html { scroll-behavior: smooth; } /* 新增：平滑滚动 */
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.7;
-      transition: background 0.3s, color 0.3s;
+      transition: all 0.3s;
+      overflow-x: hidden;
     }
-    nav {
+
+    /* 粒子背景 */
+    #particles {
       position: fixed;
-      top: 0; left: 0; right: 0;
-      background: rgba(255, 255, 255, 0.8);
-      border-bottom: 1px solid var(--border);
-      z-index: 1000;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      transition: 0.3s;
-    }
-    [data-theme="dark"] nav { background: rgba(22, 27, 34, 0.8); }
-    nav .logo { font-weight: bold; font-size: 1.3rem; color: var(--accent); }
-    nav .links a {
-      margin: 0 1rem;
-      color: var(--text);
-      text-decoration: none;
-      font-weight: 500;
-      position: relative;
-      transition: 0.3s;
-    }
-    nav .links a:hover, nav .links a.active-link { color: var(--accent); }
-    nav .links a::after { /* 新增：导航链接下划线动效 */
-        content: '';
-        position: absolute;
-        width: 100%;
-        transform: scaleX(0);
-        height: 2px;
-        bottom: -5px;
-        left: 0;
-        background-color: var(--accent);
-        transform-origin: bottom right;
-        transition: transform 0.25s ease-out;
-    }
-    nav .links a:hover::after { transform: scaleX(1); transform-origin: bottom left; }
-    .theme-toggle { background: none; border: none; font-size: 1.4rem; cursor: pointer; color: var(--text); }
-    .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
-    
-    /* 新增：滚动淡入动画 */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-    }
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      background: var(--bg);
     }
 
-    .hero {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 6rem;
-      flex-wrap: wrap;
-      gap: 2rem;
-    }
-    .hero-text h1 { font-size: 3rem; margin-bottom: 1rem; }
-    .hero-text .subtitle { font-size: 1.3rem; color: #666; margin-bottom: 1.5rem; }
-    [data-theme="dark"] .hero-text .subtitle { color: #aaa; }
-    .social-links { margin-top: 1.5rem; } /* 新增：社交链接 */
-    .social-links a { margin-right: 1rem; color: var(--text); font-size: 1.5rem; transition: 0.3s; }
-    .social-links a:hover { color: var(--accent); transform: translateY(-3px); }
-
-    .btn {
-      display: inline-block;
-      padding: 0.8rem 1.5rem;
-      background: var(--accent);
-      color: white;
-      border-radius: 8px;
-      text-decoration: none;
-      font-weight: 500;
-      transition: 0.3s;
-    }
-    .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,102,255,0.3); }
-    #canvas-container {
-      width: 200px; height: 200px;
-      border-radius: 50%;
-      overflow: hidden;
-      box-shadow: 0 10px 30px var(--shadow);
+    .container {
+      max-width: 900px;
       margin: 0 auto;
+      padding: 5rem 1.5rem;
+      text-align: center;
+      position: relative;
+      z-index: 1;
     }
-    section { margin: 6rem 0; }
-    h2 { font-size: 2.2rem; margin-bottom: 2rem; text-align: center; }
+
+    .avatar {
+      width: 130px; height: 130px;
+      border-radius: 50%;
+      margin: 0 auto 1.5rem;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 10px 30px rgba(0,102,255,0.3);
+    }
+
+    h1 { font-size: 2.8rem; margin-bottom: 0.5rem; }
+    .tagline { font-size: 1.3rem; color: #666; margin-bottom: 1rem; }
+    [data-theme="dark"] .tagline { color: #aaa; }
+
+    /* 打字效果 */
+    .typing {
+      font-size: 1.1rem;
+      color: var(--accent);
+      border-right: 2px solid var(--accent);
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 3s steps(30) forwards, blink 0.7s infinite;
+    }
+    @keyframes typing { to { width: 100%; } }
+    @keyframes blink { 50% { border-color: transparent; } }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+    .links a {
+      padding: 0.7rem 1.3rem;
+      background: var(--card);
+      color: var(--accent);
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .links a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0,102,255,0.2);
+    }
+
+    section { margin: 4rem 0; }
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+    }
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -8px; left: 50%;
+      transform: translateX(-50%);
+      width: 60px; height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    /* 项目卡片 */
     .projects-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
       gap: 1.5rem;
+      margin-top: 2rem;
     }
     .project-card {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 1.5rem;
+      text-align: left;
       transition: 0.3s;
-      display: flex;
-      flex-direction: column;
     }
-    .project-card:hover { transform: translateY(-8px); box-shadow: 0 12px 30px var(--shadow); }
-    .project-card h3 { margin-bottom: 0.5rem; color: var(--accent); }
-    .project-card p { color: #666; font-size: 0.95rem; flex-grow: 1; }
-    .project-card .tags { margin: 1rem 0; } /* 新增：项目技术标签 */
-    .project-card .tag { display: inline-block; background: var(--accent-light); color: var(--accent); padding: 0.2rem 0.6rem; border-radius: 5px; font-size: 0.8rem; margin-right: 0.5rem; margin-bottom: 0.5rem; }
+    .project-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+    .project-card h3 { margin-bottom: 0.5rem; font-size: 1.1rem; }
+    .project-card p { font-size: 0.9rem; color: #666; }
     [data-theme="dark"] .project-card p { color: #aaa; }
+    .project-card .meta { font-size: 0.8rem; color: var(--accent); margin-top: 0.5rem; }
 
-    .skills-container { /* 新增：技能分类容器 */
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 2rem;
-      text-align: center;
+    /* 技能雷达图 */
+    #skills-chart { max-width: 400px; margin: 2rem auto; }
+
+    /* 时间轴 */
+    .timeline {
+      position: relative;
+      max-width: 700px;
+      margin: 3rem auto;
     }
-    .skills-container h3 { color: var(--accent); margin-bottom: 1rem; }
-    .skills { display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: center; }
-    .skill {
+    .timeline::before {
+      content: ''; position: absolute;
+      top: 0; bottom: 0; left: 50%;
+      width: 2px; background: var(--border);
+      transform: translateX(-50%);
+    }
+    .timeline-item {
+      position: relative;
+      margin: 2rem 0;
+      width: 50%;
+    }
+    .timeline-item:nth-child(odd) { left: 0; text-align: right; padding-right: 3rem; }
+    .timeline-item:nth-child(even) { left: 50%; padding-left: 3rem; }
+    .timeline-item::before {
+      content: ''; position: absolute;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      top: 6px;
+      box-shadow: 0 0 0 4px var(--card);
+    }
+    .timeline-item:nth-child(odd)::before { right: -8px; }
+    .timeline-item:nth-child(even)::before { left: -8px; }
+    .timeline-content {
+      background: var(--card);
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    .theme-toggle {
+      position: fixed;
+      top: 20px; right: 20px;
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 50px;
-      padding: 0.5rem 1rem;
+      border-radius: 50%;
+      width: 44px; height: 44px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: 0.3s;
+    }
+    .theme-toggle:hover { transform: scale(1.1); }
+
+    footer {
+      margin-top: 5rem;
       font-size: 0.9rem;
-      transition: 0.3s;
+      color: #888;
     }
-    .skill:hover { background: var(--accent-light); color: var(--accent); }
-    .contact-form {
-      max-width: 600px;
-      margin: 0 auto;
-      display: grid;
-      gap: 1rem;
-    }
-    .contact-form input, .contact-form textarea {
-      width: 100%;
-      padding: 1rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--bg);
-      color: var(--text);
-      transition: 0.3s;
-    }
-    .contact-form input:focus, .contact-form textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); outline: none; }
-    footer { text-align: center; padding: 3rem; color: #888; font-size: 0.9rem; border-top: 1px solid var(--border); }
-    
-    /* 新增：移动端导航 */
-    .hamburger { display: none; }
+
     @media (max-width: 768px) {
-      .hero { flex-direction: column-reverse; text-align: center; }
-      nav .links {
-        display: none;
-        position: absolute;
-        top: 100%; left: 0; right: 0;
-        background: var(--card);
-        flex-direction: column;
-        padding: 1rem;
-        border-bottom: 1px solid var(--border);
-      }
-      nav .links.active { display: flex; }
-      nav .links a { margin: 0.5rem 0; }
-      .hamburger {
-        display: flex;
-        flex-direction: column;
-        gap: 5px;
-        cursor: pointer;
-      }
-      .hamburger .bar {
-        width: 25px;
-        height: 3px;
-        background: var(--text);
-        transition: 0.3s;
-      }
+      .timeline::before { left: 20px; }
+      .timeline-item { width: 100%; left: 0 !important; padding-left: 3rem !important; text-align: left; }
+      .timeline-item::before { left: 12px; }
+      .timeline-item:nth-child(odd) { padding-right: 0; text-align: left; }
     }
   </style>
 </head>
 <body>
 
-  <nav>
-    <div class="logo">Udebug</div>
-    <div class="links">
-      <a href="#about" class="nav-link">关于我</a>
-      <a href="#projects" class="nav-link">项目</a>
-      <a href="#skills" class="nav-link">技能</a>
-      <a href="#contact" class="nav-link">联系</a>
-    </div>
-    <div class="hamburger">
-      <div class="bar"></div>
-      <div class="bar"></div>
-      <div class="bar"></div>
-    </div>
-    <button class="theme-toggle" title="切换主题">🌙</button>
-  </nav>
+  <canvas id="particles"></canvas>
+  <button class="theme-toggle" onclick="toggleTheme()">Moon</button>
 
   <div class="container">
-    <section class="hero fade-in">
-      <div class="hero-text">
-        <h1>你好，我是 Udebug</h1>
-        <p class="subtitle">全栈开发者 · 热爱开源 · 用代码构建未来</p>
-        <a href="#contact" class="btn">联系我</a>
-        <div class="social-links">
-          <a href="https://github.com/your-username" target="_blank" title="GitHub">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-          </a>
-          <a href="https://linkedin.com/in/your-username" target="_blank" title="LinkedIn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
-          </a>
-        </div>
-      </div>
-      <div id="canvas-container"></div>
-    </section>
-    
-    <!-- 新增：关于我 -->
-    <section id="about" class="fade-in">
-      <h2>关于我</h2>
-      <p style="max-width: 700px; margin: 0 auto; text-align: center;">
-        我是一名充满热情的全栈开发者，专注于使用现代技术栈构建高效、可扩展的 Web 应用。我享受从零到一创造产品的过程，并坚信代码是解决现实世界问题的强大工具。除了编码，我也热衷于在技术社区分享知识，并为开源项目做出贡献。
-      </p>
-    </section>
+    <div class="avatar">U</div>
+    <h1>Udebug</h1>
+    <p class="tagline">前端开发者 · 技术爱好者</p>
+    <p class="typing">正在构建未来...</p>
 
-    <section id="projects" class="fade-in">
+    <div class="links">
+      <a href="https://github.com/Udebug" target="_blank">GitHub</a>
+      <a href="mailto:udebug@example.com" onclick="copyEmail(this)">Email</a>
+      <a href="https://twitter.com" target="_blank">Twitter</a>
+      <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+    </div>
+
+    <!-- 项目 -->
+    <section id="projects">
       <h2>我的项目</h2>
-      <div class="projects-grid">
-        <div class="project-card">
-          <h3>AI 聊天机器人</h3>
-          <p>基于 LLM 的智能助手，支持多语言对话、上下文理解和函数调用。</p>
-          <div class="tags"><span class="tag">Next.js</span><span class="tag">TypeScript</span><span class="tag">Tailwind CSS</span></div>
-          <a href="https://github.com" target="_blank" style="color:var(--accent);font-size:0.9rem; margin-top: auto;">查看源码 →</a>
+      <div class="projects-grid" id="projects-container">
+        <!-- JS 动态加载 -->
+      </div>
+    </section>
+
+    <!-- 技能雷达图 -->
+    <section id="skills">
+      <h2>技能雷达</h2>
+      <canvas id="skills-chart"></canvas>
+    </section>
+
+    <!-- 成长时间轴 -->
+    <section id="timeline">
+      <h2>成长经历</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>2023 - 2025</h3>
+            <p><strong>前端工程师 @ 某科技公司</strong><br>负责 React 组件库开发，优化性能 40%</p>
+          </div>
         </div>
-        <div class="project-card">
-          <h3>实时协作画板</h3>
-          <p>WebSocket + Canvas 实现的多人在线绘图工具，支持画笔、橡皮擦和图形绘制。</p>
-          <div class="tags"><span class="tag">Node.js</span><span class="tag">Socket.IO</span><span class="tag">Vue.js</span></div>
-          <a href="https://github.com" target="_blank" style="color:var(--accent);font-size:0.9rem; margin-top: auto;">查看源码 →</a>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>2021 - 2023</h3>
+            <p><strong>本科 · 计算机科学</strong><br>主修 Web 开发与算法，GPA 3.8/4.0</p>
+          </div>
         </div>
-        <div class="project-card">
-          <h3>个人博客系统</h3>
-          <p>Next.js + MDX 构建，支持静态站点生成，自动从 GitHub 部署到 Vercel。</p>
-          <div class="tags"><span class="tag">Next.js</span><span class="tag">MDX</span><span class="tag">Vercel</span></div>
-          <a href="https://github.com" target="_blank" style="color:var(--accent);font-size:0.9rem; margin-top: auto;">查看源码 →</a>
-        </div>
-        <div class="project-card">
-          <h3>电商后台管理</h3>
-          <p>功能完善的后台系统，包括商品管理、订单处理、数据可视化图表等。</p>
-          <div class="tags"><span class="tag">React</span><span class="tag">Node.js</span><span class="tag">MongoDB</span><span class="tag">ECharts</span></div>
-          <a href="https://github.com" target="_blank" style="color:var(--accent);font-size:0.9rem; margin-top: auto;">查看源码 →</a>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>2020</h3>
+            <p><strong>首次开源项目</strong><br>发布 Chrome 插件，获 500+ Star</p>
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="skills" class="fade-in">
-      <h2>技术栈</h2>
-      <div class="skills-container">
-        <div class="skill-category">
-            <h3>前端</h3>
-            <div class="skills">
-                <div class="skill">HTML5 & CSS3</div>
-                <div class="skill">JavaScript (ES6+)</div>
-                <div class="skill">TypeScript</div>
-                <div class="skill">React / Next.js</div>
-                <div class="skill">Vue.js</div>
-                <div class="skill">Three.js</div>
-            </div>
-        </div>
-        <div class="skill-category">
-            <h3>后端</h3>
-            <div class="skills">
-                <div class="skill">Node.js / Express</div>
-                <div class="skill">Python / FastAPI</div>
-                <div class="skill">RESTful API</div>
-                <div class="skill">GraphQL</div>
-                <div class="skill">MongoDB</div>
-            </div>
-        </div>
-        <div class="skill-category">
-            <h3>其它</h3>
-            <div class="skills">
-                <div class="skill">Docker</div>
-                <div class="skill">Git & GitHub</div>
-                <div class="skill">AWS / Vercel</div>
-                <div class="skill">CI/CD</div>
-                <div class="skill">Agile</div>
-            </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="fade-in">
-      <h2>联系我</h2>
-      <p style="text-align:center; max-width: 600px; margin: -1rem auto 2rem; color: #666;">期待与您交流，无论是项目合作还是技术探讨！</p>
-      [data-theme="dark"] <p> { color: #aaa; }</p>
-      <form class="contact-form" action="https://formspree.io/f/your-email-hash" method="POST">
-        <input type="text" name="name" placeholder="你的名字" required />
-        <input type="email" name="email" placeholder="你的邮箱" required />
-        <textarea name="message" rows="5" placeholder="留言内容..." required></textarea>
-        <button type="submit" class="btn">发送消息</button>
-      </form>
-    </section>
+    <footer>
+      © 2025 Udebug · Hosted on <a href="https://pages.github.com" style="color:var(--accent)">GitHub Pages</a>
+    </footer>
   </div>
 
-  <footer>
-    © 2025 Udebug · All Rights Reserved. Hosted on <a href="https://pages.github.com" target="_blank" style="color:var(--accent)">GitHub Pages</a>
-  </footer>
-
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      
-      // 初始化所有功能
-      init3D();
-      initTheme();
-      initMobileNav();
-      initScrollAnimations();
-      initNavHighlighting();
+    // 粒子背景
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-      // 3D 头像
-      function init3D() {
-        let scene, camera, renderer, controls, mesh;
-        const container = document.getElementById('canvas-container');
-        if (!container) return;
+    const particlesArray = [];
+    const mouse = { x: null, y: null };
+    canvas.addEventListener('mousemove', e => { mouse.x = e.x; mouse.y = e.y; });
 
-        scene = new THREE.Scene();
-        camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
-        renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(container.clientWidth, container.clientHeight);
-        container.appendChild(renderer.domElement);
-
-        const geometry = new THREE.TorusKnotGeometry(1.2, 0.35, 128, 16);
-        const material = new THREE.MeshStandardMaterial({ 
-          color: 0x58a6ff, metalness: 0.8, roughness: 0.2 
-        });
-        mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-
-        const light = new THREE.DirectionalLight(0xffffff, 1.2);
-        light.position.set(5, 5, 5);
-        scene.add(light);
-        scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-        camera.position.z = 5;
-        controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.autoRotate = true;
-        controls.enableZoom = false; // 禁用缩放
-
-        function animate() {
-          requestAnimationFrame(animate);
-          controls.update();
-          renderer.render(scene, camera);
-        }
-        animate();
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = Math.random() * 1.5 - 0.75;
+        this.speedY = Math.random() * 1.5 - 0.75;
       }
-
-      // 主题切换
-      const themeToggle = document.querySelector('.theme-toggle');
-      function toggleTheme() {
-        const isDark = document.body.dataset.theme === 'dark';
-        setTheme(isDark ? 'light' : 'dark');
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        if (this.size > 0.2) this.size -= 0.01;
       }
-      function setTheme(theme) {
-        document.body.dataset.theme = theme;
-        localStorage.setItem('theme', theme);
-        themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+      draw() {
+        ctx.fillStyle = 'rgba(0, 102, 255, 0.8)';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
       }
-      function initTheme() {
-        themeToggle.addEventListener('click', toggleTheme);
-        const savedTheme = localStorage.getItem('theme');
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (savedTheme) {
-          setTheme(savedTheme);
-        } else if (prefersDark) {
-          setTheme('dark');
-        } else {
-          setTheme('light');
-        }
-      }
+    }
 
-      // 移动端导航
-      function initMobileNav() {
-        const hamburger = document.querySelector('.hamburger');
-        const navLinks = document.querySelector('nav .links');
-        hamburger.addEventListener('click', () => {
-          navLinks.classList.toggle('active');
-        });
-      }
-
-      // 滚动动画
-      function initScrollAnimations() {
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add('visible');
-            }
-          });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-      }
-
-      // 导航链接高亮
-      function initNavHighlighting() {
-        const sections = document.querySelectorAll('section[id]');
-        const navLinks = document.querySelectorAll('.nav-link');
-
-        const observer = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              navLinks.forEach(link => {
-                link.classList.toggle('active-link', link.getAttribute('href').substring(1) === entry.target.id);
-              });
-            }
-          });
-        }, { rootMargin: '-50% 0px -50% 0px' });
-
-        sections.forEach(section => observer.observe(section));
-      }
+    function initParticles() {
+      for (let i = 0; i < 100; i++) particlesArray.push(new Particle());
+    }
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particlesArray.forEach((p, i) => {
+        p.update();
+        p.draw();
+        if (p.size <= 0.2) { particlesArray.splice(i, 1); particlesArray.push(new Particle()); }
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    initParticles();
+    animateParticles();
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
     });
+
+    // 主题切换
+    function toggleTheme() {
+      const isDark = document.body.getAttribute('data-theme') === 'dark';
+      const newTheme = isDark ? 'light' : 'dark';
+      document.body.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      document.querySelector('.theme-toggle').textContent = newTheme === 'dark' ? 'Sun' : 'Moon';
+    }
+
+    // 复制邮箱
+    function copyEmail(el) {
+      navigator.clipboard.writeText('udebug@example.com');
+      el.textContent = 'Copied!';
+      setTimeout(() => el.innerHTML = 'Email', 2000);
+    }
+
+    // GitHub 项目自动加载
+    fetch('https://api.github.com/users/Udebug/repos?sort=updated&per_page=6')
+      .then(res => res.json())
+      .then(repos => {
+        const container = document.getElementById('projects-container');
+        repos.forEach(repo => {
+          const card = document.createElement('div');
+          card.className = 'project-card';
+          card.innerHTML = `
+            <h3>${repo.name}</h3>
+            <p>${repo.description || '无描述'}</p>
+            <div class="meta">⭐ ${repo.stargazers_count} | 更新于 ${new Date(repo.updated_at).toLocaleDateString()}</div>
+          `;
+          container.appendChild(card);
+        });
+      });
+
+    // 技能雷达图
+    new Chart(document.getElementById('skills-chart'), {
+      type: 'radar',
+      data: {
+        labels: ['HTML/CSS', 'JavaScript', 'React', 'Node.js', 'Git', '设计'],
+        datasets: [{
+          label: '技能水平',
+          data: [90, 85, 80, 70, 75, 65],
+          backgroundColor: 'rgba(0, 102, 255, 0.2)',
+          borderColor: 'rgba(0, 102, 255, 1)',
+          borderWidth: 2
+        }]
+      },
+      options: { scales: { r: { beginAtZero: true, max: 100 } } }
+    });
+
+    // 初始化主题
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (saved) {
+      document.body.setAttribute('data-theme', saved);
+      document.querySelector('.theme-toggle').textContent = saved === 'dark' ? 'Sun' : 'Moon';
+    } else if (prefersDark) {
+      toggleTheme();
+    }
   </script>
 </body>
 </html>
