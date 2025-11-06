@@ -1,407 +1,586 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>张发振 | 嵌入式工程师</title>
-  <meta name="description" content="张发振，嵌入式开发工程师，精通 STM32、FreeRTOS、LVGL、PID 控制，具备智能硬件与 AI 应用经验。">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>张</text></svg>">
-  
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  
-  <style>
-    :root {
-      --bg: #ffffff;
-      --text: #1a1a1a;
-      --accent: #0066ff;
-      --card: #f8f9fa;
-      --border: #e1e4e8;
-    }
-    [data-theme="dark"] {
-      --bg: #0d1117;
-      --text: #f0f6fc;
-      --accent: #58a6ff;
-      --card: #161b22;
-      --border: #30363d;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.7;
-      transition: all 0.3s;
-      overflow-x: hidden;
-    }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>张发振 | 嵌入式工程师</title>
+  <meta name="description" content="张发振，嵌入式开发工程师，精通 STM32、FreeRTOS、LVGL、PID 控制，具备智能硬件与 AI 应用经验。">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>张</text></svg>">
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #1a1a1a;
+      --accent: #0066ff;
+      --card: #f8f9fa;
+      --border: #e1e4e8;
+    }
+    [data-theme="dark"] {
+      --bg: #0d1117;
+      --text: #f0f6fc;
+      --accent: #58a6ff;
+      --card: #161b22;
+      --border: #30363d;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      transition: all 0.3s;
+      overflow-x: hidden;
+    }
 
-    /* 粒子背景 */
-    #particles {
-      position: fixed;
-      top: 0; left: 0; width: 100%; height: 100%;
-      z-index: -1;
-      background: var(--bg);
-    }
+    /* 粒子背景 */
+    #particles {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      background: var(--bg);
+    }
 
-    .container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 5rem 1.5rem;
-      text-align: center;
-      position: relative;
-      z-index: 1;
-    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 5rem 1.5rem;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
 
-    .avatar {
-      width: 130px; height: 130px;
-      border-radius: 50%;
-      margin: 0 auto 1.5rem;
-      background: var(--accent);
+    .avatar {
+      width: 130px; height: 130px;
+      border-radius: 50%;
+      margin: 0 auto 1.5rem;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      color: white;
+      font-weight: bold;
+      box-shadow: 0 10px 30px rgba(0,102,255,0.3);
+    }
+
+    h1 { font-size: 2.8rem; margin-bottom: 0.5rem; }
+    .tagline { font-size: 1.3rem; color: #666; margin-bottom: 1rem; }
+    [data-theme="dark"] .tagline { color: #aaa; }
+
+    /* 打字效果 */
+    .typing {
+      font-size: 1.1rem;
+      color: var(--accent);
+      border-right: 2px solid var(--accent);
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation: typing 3s steps(30) forwards, blink 0.7s infinite;
+    }
+    @keyframes typing { to { width: 100%; } }
+    @keyframes blink { 50% { border-color: transparent; } }
+
+    .links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+    .links a {
+      padding: 0.7rem 1.3rem;
+      background: var(--card);
+      color: var(--accent);
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.2s;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .links a:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 16px rgba(0,102,255,0.2);
+    }
+
+    section { margin: 4rem 0; }
+    h2 {
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+    }
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -8px; left: 50%;
+      transform: translateX(-50%);
+      width: 60px; height: 3px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    /* 项目卡片 */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: left;
+      transition: 0.3s;
+    }
+    .project-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
+    .project-card h3 { margin-bottom: 0.5rem; font-size: 1.2rem; color: var(--accent); }
+    .project-card p { font-size: 0.95rem; color: #555; margin: 0.5rem 0; }
+    [data-theme="dark"] .project-card p { color: #ccc; }
+    .project-card ul { margin: 0.8rem 0; padding-left: 1.3rem; }
+    .project-card li { font-size: 0.9rem; margin: 0.4rem 0; color: #666; }
+    [data-theme="dark"] .project-card li { color: #aaa; }
+
+    /* 技能雷达图 */
+    #skills-chart { max-width: 400px; margin: 2rem auto; }
+
+    /* 时间轴 */
+    .timeline {
+      position: relative;
+      max-width: 700px;
+      margin: 3rem auto;
+    }
+    .timeline::before {
+      content: ''; position: absolute;
+      top: 0; bottom: 0; left: 50%;
+      width: 2px; background: var(--border);
+      transform: translateX(-50%);
+    }
+    .timeline-item {
+      position: relative;
+      margin: 2rem 0;
+      width: 50%;
+    }
+    .timeline-item:nth-child(odd) { left: 0; text-align: right; padding-right: 3rem; }
+    .timeline-item:nth-child(even) { left: 50%; padding-left: 3rem; }
+    .timeline-item::before {
+      content: ''; position: absolute;
+      width: 16px; height: 16px;
+      border-radius: 50%;
+      background: var(--accent);
+      top: 6px;
+      box-shadow: 0 0 0 4px var(--card);
+    }
+    .timeline-item:nth-child(odd)::before { right: -8px; }
+    .timeline-item:nth-child(even)::before { left: -8px; }
+    .timeline-content {
+      background: var(--card);
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+
+    /* 嵌入式进化路线图样式 */
+    .roadmap-grid {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 3rem;
-      color: white;
-      font-weight: bold;
-      box-shadow: 0 10px 30px rgba(0,102,255,0.3);
-    }
-
-    h1 { font-size: 2.8rem; margin-bottom: 0.5rem; }
-    .tagline { font-size: 1.3rem; color: #666; margin-bottom: 1rem; }
-    [data-theme="dark"] .tagline { color: #aaa; }
-
-    /* 打字效果 */
-    .typing {
-      font-size: 1.1rem;
-      color: var(--accent);
-      border-right: 2px solid var(--accent);
-      white-space: nowrap;
-      overflow: hidden;
-      width: 0;
-      animation: typing 3s steps(30) forwards, blink 0.7s infinite;
-    }
-    @keyframes typing { to { width: 100%; } }
-    @keyframes blink { 50% { border-color: transparent; } }
-
-    .links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      justify-content: center;
-      margin: 2rem 0;
-    }
-    .links a {
-      padding: 0.7rem 1.3rem;
-      background: var(--card);
-      color: var(--accent);
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 500;
-      transition: all 0.2s;
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .links a:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 16px rgba(0,102,255,0.2);
-    }
-
-    section { margin: 4rem 0; }
-    h2 {
-      font-size: 2rem;
-      margin-bottom: 2rem;
-      position: relative;
-      display: inline-block;
-    }
-    h2::after {
-      content: '';
-      position: absolute;
-      bottom: -8px; left: 50%;
-      transform: translateX(-50%);
-      width: 60px; height: 3px;
-      background: var(--accent);
-      border-radius: 2px;
-    }
-
-    /* 项目卡片 */
-    .projects-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 1.5rem;
+      flex-direction: column;
+      gap: 2rem;
       margin-top: 2rem;
+      align-items: center; /* Center items on desktop */
     }
-    .project-card {
+    .roadmap-item {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 1.5rem;
       text-align: left;
       transition: 0.3s;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      width: 100%; /* Full width on mobile */
+      max-width: 600px; /* Max width on desktop */
     }
-    .project-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.1); }
-    .project-card h3 { margin-bottom: 0.5rem; font-size: 1.2rem; color: var(--accent); }
-    .project-card p { font-size: 0.95rem; color: #555; margin: 0.5rem 0; }
-    [data-theme="dark"] .project-card p { color: #ccc; }
-    .project-card ul { margin: 0.8rem 0; padding-left: 1.3rem; }
-    .project-card li { font-size: 0.9rem; margin: 0.4rem 0; color: #666; }
-    [data-theme="dark"] .project-card li { color: #aaa; }
-
-    /* 技能雷达图 */
-    #skills-chart { max-width: 400px; margin: 2rem auto; }
-
-    /* 时间轴 */
-    .timeline {
-      position: relative;
-      max-width: 700px;
-      margin: 3rem auto;
+    .roadmap-item:hover {
+        border-color: var(--accent);
+        box-shadow: 0 8px 20px rgba(0,102,255,0.1);
     }
-    .timeline::before {
-      content: ''; position: absolute;
-      top: 0; bottom: 0; left: 50%;
-      width: 2px; background: var(--border);
-      transform: translateX(-50%);
-    }
-    .timeline-item {
-      position: relative;
-      margin: 2rem 0;
-      width: 50%;
-    }
-    .timeline-item:nth-child(odd) { left: 0; text-align: right; padding-right: 3rem; }
-    .timeline-item:nth-child(even) { left: 50%; padding-left: 3rem; }
-    .timeline-item::before {
-      content: ''; position: absolute;
-      width: 16px; height: 16px;
-      border-radius: 50%;
-      background: var(--accent);
-      top: 6px;
-      box-shadow: 0 0 0 4px var(--card);
-    }
-    .timeline-item:nth-child(odd)::before { right: -8px; }
-    .timeline-item:nth-child(even)::before { left: -8px; }
-    .timeline-content {
-      background: var(--card);
-      padding: 1rem 1.5rem;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-    }
-
-    .theme-toggle {
-      position: fixed;
-      top: 20px; right: 20px;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 50%;
-      width: 44px; height: 44px;
-      font-size: 1.3rem;
-      cursor: pointer;
+    .roadmap-header {
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      transition: 0.3s;
+      margin-bottom: 0.8rem;
     }
-    .theme-toggle:hover { transform: scale(1.1); }
+    .roadmap-level {
+      font-weight: bold;
+      font-size: 1rem;
+      color: white;
+      background: var(--accent);
+      padding: 0.2rem 0.6rem;
+      border-radius: 6px;
+    }
+    .roadmap-title {
+      font-size: 1.4rem;
+      color: var(--accent);
+    }
+    .roadmap-focus {
+        font-size: 0.95rem;
+        color: #555;
+        margin-top: 0.5rem;
+    }
+    [data-theme="dark"] .roadmap-focus { color: #ccc; }
+    
+    .theme-toggle {
+      position: fixed;
+      top: 20px; right: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      width: 44px; height: 44px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: 0.3s;
+    }
+    .theme-toggle:hover { transform: scale(1.1); }
 
-    footer {
-      margin-top: 5rem;
-      font-size: 0.9rem;
-      color: #888;
-    }
+    footer {
+      margin-top: 5rem;
+      font-size: 0.9rem;
+      color: #888;
+    }
 
-    @media (max-width: 768px) {
-      .timeline::before { left: 20px; }
-      .timeline-item { width: 100%; left: 0 !important; padding-left: 3rem !important; text-align: left; }
-      .timeline-item::before { left: 12px; }
-      .timeline-item:nth-child(odd) { padding-right: 0; text-align: left; }
+    @media (max-width: 768px) {
+      .timeline::before { left: 20px; }
+      .timeline-item { width: 100%; left: 0 !important; padding-left: 3rem !important; text-align: left; }
+      .timeline-item::before { left: 12px; }
+      .timeline-item:nth-child(odd) { padding-right: 0; text-align: left; }
+    }
+    
+    /* Toast Notification Style */
+    #toast {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #333;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 8px;
+        opacity: 0;
+        transition: opacity 0.3s;
+        z-index: 2000;
+        font-size: 0.9rem;
     }
-  </style>
+  </style>
 </head>
 <body>
 
-  <canvas id="particles"></canvas>
-  <button class="theme-toggle" onclick="toggleTheme()">Moon</button>
+  <canvas id="particles"></canvas>
+  <button class="theme-toggle" onclick="toggleTheme()">Moon</button>
 
-  <div class="container">
-    <div class="avatar">张</div>
-    <h1>张发振</h1>
-    <p class="tagline">嵌入式开发工程师 · 硕士 · 精通 STM32 & FreeRTOS</p>
-    <p class="typing">正在构建智能硬件未来...</p>
+  <div class="container">
+    <div class="avatar">张</div>
+    <h1>张发振</h1>
+    <p class="tagline">嵌入式开发工程师 · 硕士 · 精通 STM32 & FreeRTOS</p>
+    <p class="typing">正在构建智能硬件未来...</p>
 
-    <div class="links">
-      <a href="tel:13781563124">Phone</a>
-      <a href="mailto:zz952706@126.com" onclick="copyEmail(this)">Email</a>
-      <a href="https://github.com" target="_blank">GitHub</a>
-      <a href="https://linkedin.com" target="_blank">LinkedIn</a>
-    </div>
+    <div class="links">
+      <a href="tel:13781563124">Phone</a>
+      <a href="#" onclick="copyEmail(this); return false;">Email</a>
+      <a href="https://github.com" target="_blank">GitHub</a>
+      <a href="https://linkedin.com" target="_blank">LinkedIn</a>
+    </div>
 
-    <!-- 项目经历 -->
-    <section id="projects">
-      <h2>项目经历</h2>
-      <div class="projects-grid">
+    <!-- 项目经历 -->
+    <section id="projects">
+      <h2>项目经历</h2>
+      <div class="projects-grid">
 
-        <!-- 项目1：自平衡小车 -->
-        <div class="project-card">
-          <h3>基于 PID 控制的两轮自平衡小车</h3>
-          <p><strong>核心技术：</strong>STM32F103C8T6、MPU6050、卡尔曼滤波、PID、FreeRTOS、蓝牙遥控</p>
-          <ul>
-            <li>使用 MPU6050 + 卡尔曼滤波实现高精度姿态检测</li>
-            <li>PID 算法精确控制 TB6612 电机，响应速度 < 50ms</li>
-            <li>集成 JDY-31 蓝牙模块，支持手机遥控</li>
-            <li>FreeRTOS 任务调度：传感器采集、控制运算、OLED 显示</li>
-          </ul>
+        <!-- 项目1：自平衡小车 -->
+        <div class="project-card">
+          <h3>基于 PID 控制的两轮自平衡小车</h3>
+          <p><strong>核心技术：</strong>STM32F103C8T6、MPU6050、卡尔曼滤波、PID、FreeRTOS、蓝牙遥控</p>
+          <ul>
+            <li>使用 MPU6050 + 卡尔曼滤波实现高精度姿态检测</li>
+            <li>PID 算法精确控制 TB6612 电机，响应速度 < 50ms</li>
+            <li>集成 JDY-31 蓝牙模块，支持手机遥控</li>
+            <li>FreeRTOS 任务调度：传感器采集、控制运算、OLED 显示</li>
+          </ul>
+        </div>
+
+        <!-- 项目2：智能手表 -->
+        <div class="project-card">
+          <h3>基于 STM32 的智能手表</h3>
+          <p><strong>核心技术：</strong>FreeRTOS、LVGL、MPU6050、RTC、低功耗优化</p>
+          <ul>
+            <li>设计多界面切换逻辑（时钟/菜单/设置）</li>
+            <li>开发“平衡球”体感游戏，倾斜控制小球移动</li>
+            <li>实现 RTC 精准时间读写与低功耗挂起策略</li>
+            <li>任务调度优化，电池续航提升 60%</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 技能雷达图 -->
+    <section id="skills">
+      <h2>专业技能</h2>
+      <canvas id="skills-chart"></canvas>
+      <div style="max-width:600px;margin:1rem auto;font-size:0.9rem;color:#666;">
+        C/C++、STM32、FreeRTOS、LVGL、通信协议、PCB 设计、Python AI
+      </div>
+    </section>
+
+    <!-- 成长时间轴 -->
+    <section id="timeline">
+      <h2>教育与科研</h2>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>2020 - 2025</h3>
+            <p><strong> BILIBILI · 博主</strong><br>江协科技:STC89C51,STM32;正点原子:FreeRTOS,LVGL 尚硅谷:平衡小车; 黑马程序员:C,C++,Linux;</p>
+          </div>
+          
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>2022 - 2025</h3>
+            <p><strong>吉林化工大学 · 硕士</strong><br>研究方向：大型石化装置异常工况智能诊断</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-content">
+            <h3>2023 - 2025</h3>
+            <p><strong>国家自然科学基金项目</strong><br>编号 61933013<br>大型石化装置的故障诊断、预测与维护</p>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 进化路线图 -->
+    <section id="roadmap">
+      <h2>嵌入式工程师进化路线图</h2>
+      <div class="roadmap-grid">
+
+        <div class="roadmap-item">
+          <div class="roadmap-header">
+            <span class="roadmap-level">L1 - 入门</span>
+            <h3 class="roadmap-title">基础硬件与编程</h3>
+          </div>
+          <p class="roadmap-focus"><strong>核心：</strong>C 语言基础, 51/STM32 外设操作 (GPIO, ADC, Timer), 基础电路图阅读。</p>
+          <p>目标：能独立完成简单外设驱动和基础功能实现，理解裸机编程概念。</p>
         </div>
 
-        <!-- 项目2：智能手表 -->
-        <div class="project-card">
-          <h3>基于 STM32 的智能手表</h3>
-          <p><strong>核心技术：</strong>FreeRTOS、LVGL、MPU6050、RTC、低功耗优化</p>
-          <ul>
-            <li>设计多界面切换逻辑（时钟/菜单/设置）</li>
-            <li>开发“平衡球”体感游戏，倾斜控制小球移动</li>
-            <li>实现 RTC 精准时间读写与低功耗挂起策略</li>
-            <li>任务调度优化，电池续航提升 60%</li>
-          </ul>
+        <div class="roadmap-item">
+          <div class="roadmap-header">
+            <span class="roadmap-level">L2 - 初级</span>
+            <h3 class="roadmap-title">系统与协议应用</h3>
+          </div>
+          <p class="roadmap-focus"><strong>核心：</strong>FreeRTOS/RT-Thread 移植与任务管理, USART, SPI, I2C, CAN 协议应用, 固件分层结构。</p>
+          <p>目标：熟练使用 RTOS 进行多任务调度，掌握常用通信协议，能够编写结构清晰的固件。</p>
         </div>
 
+        <div class="roadmap-item">
+          <div class="roadmap-header">
+            <span class="roadmap-level">L3 - 中级</span>
+            <h3 class="roadmap-title">高级应用与优化</h3>
+          </div>
+          <p class="roadmap-focus"><strong>核心：</strong>LVGL/GUI 界面开发, PID 控制算法, 驱动设计模式, 低功耗设计, 内存管理/优化。</p>
+          <p>目标：能够开发美观、流畅的 HMI 界面，实现复杂的控制功能，并进行系统级性能优化。</p>
+        </div>
+        
+        <div class="roadmap-item">
+          <div class="roadmap-header">
+            <span class="roadmap-level">L4 - 高级</span>
+            <h3 class="roadmap-title">架构与全栈集成</h3>
+          </div>
+          <p class="roadmap-focus"><strong>核心：</strong>Linux 嵌入式系统 (Buildroot/Yocto), TCP/IP & MQTT 网络通信, 跨平台开发 (Qt/Web), 复杂系统架构设计。</p>
+          <p>目标：具备全栈视角，能主导复杂嵌入式项目的架构设计，实现设备与云端、移动端的无缝集成。</p>
+        </div>
+        
+        <div class="roadmap-item">
+          <div class="roadmap-header">
+            <span class="roadmap-level">L5 - 专家</span>
+            <h3 class="roadmap-title">领域深耕与创新</h3>
+          </div>
+          <p class="roadmap-focus"><strong>核心：</strong>AI 边缘计算 (TinyML/NN), 硬件加速 (DMA2D/FPU), 驱动与内核深度定制, 解决行业级难题。</p>
+          <p>目标：成为特定领域（如工控、AIoT）的专家，引领技术方向，具备创新和解决架构性难题的能力。</p>
+        </div>
+        
       </div>
     </section>
 
-    <!-- 技能雷达图 -->
-    <section id="skills">
-      <h2>专业技能</h2>
-      <canvas id="skills-chart"></canvas>
-      <div style="max-width:600px;margin:1rem auto;font-size:0.9rem;color:#666;">
-        C/C++、STM32、FreeRTOS、LVGL、通信协议、PCB 设计、Python AI
-      </div>
-    </section>
+    <footer>
+      © 2025 张发振 · 托管于 <a href="https://pages.github.com" style="color:var(--accent)">GitHub Pages</a>
+    </footer>
+  </div>
 
-    <!-- 成长时间轴 -->
-    <section id="timeline">
-      <h2>教育与科研</h2>
-      <div class="timeline">
-        <div class="timeline-item">
-          <div class="timeline-content">
-            <h3>2020 - 2025</h3>
-            <p><strong> BILIBILI · 博主</strong><br>江协科技:STC89C51,STM32;正点原子:FreeRTOS,LVGL 尚硅谷:平衡小车; 黑马程序员:C,C++,Linux;</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-content">
-            <h3>2022 - 2025</h3>
-            <p><strong>吉林化工大学 · 硕士</strong><br>研究方向：大型石化装置异常工况智能诊断</p>
-          </div>
-        </div>
-        <div class="timeline-item">
-          <div class="timeline-content">
-            <h3>2023 - 2025</h3>
-            <p><strong>国家自然科学基金项目</strong><br>编号 61933013<br>大型石化装置的故障诊断、预测与维护</p>
-          </div>
-        </div>
-      </div>
-    </section>
+  <!-- Toast Notification Element -->
+  <div id="toast"></div>
 
-    <footer>
-      © 2025 张发振 · 托管于 <a href="https://pages.github.com" style="color:var(--accent)">GitHub Pages</a>
-    </footer>
-  </div>
+  <script>
+    // 粒子背景
+    const canvas = document.getElementById('particles');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-  <script>
-    // 粒子背景
-    const canvas = document.getElementById('particles');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    const particlesArray = [];
+    const mouse = { x: null, y: null };
+    // Note: Removed mousemove listener for simplicity, particle movement is autonomous.
 
-    const particlesArray = [];
-    const mouse = { x: null, y: null };
-    canvas.addEventListener('mousemove', e => { mouse.x = e.x; mouse.y = e.y; });
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 3 + 1;
+        this.speedX = Math.random() * 1.5 - 0.75;
+        this.speedY = Math.random() * 1.5 - 0.75;
+      }
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+        // If particle moves off screen, reset its position
+        if (this.x > canvas.width || this.x < 0) this.speedX = -this.speedX;
+        if (this.y > canvas.height || this.y < 0) this.speedY = -this.speedY;
 
-    class Particle {
-      constructor() {
-        this.x = Math.random() * canvas.width;
-        this.y = Math.random() * canvas.height;
-        this.size = Math.random() * 3 + 1;
-        this.speedX = Math.random() * 1.5 - 0.75;
-        this.speedY = Math.random() * 1.5 - 0.75;
-      }
-      update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if (this.size > 0.2) this.size -= 0.01;
-      }
-      draw() {
-        ctx.fillStyle = 'rgba(0, 102, 255, 0.8)';
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
+        // Simple fading/shrinking effect
+        if (this.size > 0.2) this.size -= 0.005; 
+      }
+      draw() {
+        ctx.fillStyle = 'rgba(0, 102, 255, 0.8)';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      for (let i = 0; i < 100; i++) particlesArray.push(new Particle());
+    }
+    function animateParticles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particlesArray.forEach((p, i) => {
+        p.update();
+        p.draw();
+        // Re-spawn particle if size is too small
+        if (p.size <= 0.2) { 
+            particlesArray[i] = new Particle(); // Re-use index for efficiency
+        }
+      });
+      requestAnimationFrame(animateParticles);
+    }
+    
+    // Start animation loop when window loads
+    window.onload = function() {
+        initParticles();
+        animateParticles();
+        
+        // Apply initial theme setting on load
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved) {
+            document.body.setAttribute('data-theme', saved);
+            document.querySelector('.theme-toggle').textContent = saved === 'dark' ? 'Sun' : 'Moon';
+        } else if (prefersDark) {
+            // Only set theme if system prefers dark and no saved theme exists
+            toggleTheme(); 
+        }
+
+        // Initialize chart after window loads to ensure canvas is ready
+        initSkillsChart();
+    }
+    
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // 主题切换
+    function toggleTheme() {
+      const isDark = document.body.getAttribute('data-theme') === 'dark';
+      const newTheme = isDark ? 'light' : 'dark';
+      document.body.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      document.querySelector('.theme-toggle').textContent = newTheme === 'dark' ? 'Sun' : 'Moon';
+    }
+
+    // 复制邮箱 - 使用 Toast 提示
+    function copyEmail(el) {
+      const email = 'zz952706@126.com';
+      const toast = document.getElementById('toast');
+        
+      navigator.clipboard.writeText(email).then(() => {
+        el.textContent = '已复制!';
+        toast.textContent = '邮箱地址已复制: ' + email;
+        toast.style.opacity = 1;
+        
+        setTimeout(() => {
+          el.innerHTML = 'Email';
+          toast.style.opacity = 0;
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy text: ', err);
+        el.textContent = '复制失败!';
+        toast.textContent = '复制失败，请手动复制: ' + email;
+        toast.style.opacity = 1;
+        setTimeout(() => {
+          el.innerHTML = 'Email';
+          toast.style.opacity = 0;
+        }, 3000);
+      });
+    }
+
+    // 技能雷达图
+    function initSkillsChart() {
+        const ctx = document.getElementById('skills-chart').getContext('2d');
+        new Chart(ctx, {
+            type: 'radar',
+            data: {
+                labels: ['C/C++', 'STM32', 'FreeRTOS', 'LVGL', '通信协议', 'PCB 设计'],
+                datasets: [{
+                    label: '技能水平',
+                    data: [85, 90, 88, 82, 85, 80],
+                    backgroundColor: 'rgba(0, 102, 255, 0.2)',
+                    borderColor: 'rgba(0, 102, 255, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(0, 102, 255, 1)',
+                    pointBorderColor: '#fff',
+                    pointHoverBackgroundColor: '#fff',
+                    pointHoverBorderColor: 'rgba(0, 102, 255, 1)'
+                }]
+            },
+            options: { 
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: { 
+                    r: { 
+                        beginAtZero: true, 
+                        max: 100,
+                        angleLines: { color: 'var(--border)' },
+                        grid: { color: 'var(--border)' },
+                        pointLabels: { 
+                            font: { size: 14 },
+                            color: 'var(--text)'
+                        },
+                        ticks: { backdropColor: 'var(--card)', color: 'var(--text)' }
+                    } 
+                },
+                plugins: { legend: { display: false } }
+            }
+        });
     }
 
-    function initParticles() {
-      for (let i = 0; i < 100; i++) particlesArray.push(new Particle());
-    }
-    function animateParticles() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particlesArray.forEach((p, i) => {
-        p.update();
-        p.draw();
-        if (p.size <= 0.2) { particlesArray.splice(i, 1); particlesArray.push(new Particle()); }
-      });
-      requestAnimationFrame(animateParticles);
-    }
-    initParticles();
-    animateParticles();
-    window.addEventListener('resize', () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    });
-
-    // 主题切换
-    function toggleTheme() {
-      const isDark = document.body.getAttribute('data-theme') === 'dark';
-      const newTheme = isDark ? 'light' : 'dark';
-      document.body.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-      document.querySelector('.theme-toggle').textContent = newTheme === 'dark' ? 'Sun' : 'Moon';
-    }
-
-    // 复制邮箱
-    function copyEmail(el) {
-      navigator.clipboard.writeText('zz952706@126.com');
-      el.textContent = 'Copied!';
-      setTimeout(() => el.innerHTML = 'Email', 2000);
-    }
-
-    // 技能雷达图
-    new Chart(document.getElementById('skills-chart'), {
-      type: 'radar',
-      data: {
-        labels: ['C/C++', 'STM32', 'FreeRTOS', 'LVGL', '通信协议', 'PCB 设计'],
-        datasets: [{
-          label: '技能水平',
-          data: [85, 90, 88, 82, 85, 80],
-          backgroundColor: 'rgba(0, 102, 255, 0.2)',
-          borderColor: 'rgba(0, 102, 255, 1)',
-          borderWidth: 2
-        }]
-      },
-      options: { 
-        scales: { r: { beginAtZero: true, max: 100 } },
-        plugins: { legend: { display: false } }
-      }
-    });
-
-    // 初始化主题
-    const saved = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    if (saved) {
-      document.body.setAttribute('data-theme', saved);
-      document.querySelector('.theme-toggle').textContent = saved === 'dark' ? 'Sun' : 'Moon';
-    } else if (prefersDark) {
-      toggleTheme();
-    }
-  </script>
+  </script>
 </body>
 </html>
